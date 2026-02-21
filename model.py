@@ -100,7 +100,7 @@ def train_ridge_regression(X_train, y_train, alpha=1.0):
     model.fit(X_train, y_train)
     return model
 
-def evaluate_model(model, X_test, y_test, X_train=None, y_train=None, cv_folds=5) -> dict:
+def evaluate_model(model, X_test, y_test, X_train=None, y_train=None, cv_folds=5, perform_cv=True) -> dict:
     
     y_pred = model.predict(X_test)
     
@@ -114,7 +114,7 @@ def evaluate_model(model, X_test, y_test, X_train=None, y_train=None, cv_folds=5
         'RMSE': round(rmse, 2)
     }
     
-    if X_train is not None and y_train is not None:
+    if perform_cv and X_train is not None and y_train is not None:
         try:
             X_full = np.vstack([X_train, X_test]) if hasattr(X_train, 'values') is False else pd.concat([X_train, X_test])
             y_full = np.concatenate([y_train, y_test]) if hasattr(y_train, 'values') is False else pd.concat([y_train, y_test])
@@ -144,12 +144,12 @@ def train_all_models(X_train, y_train) -> dict:
     
     return models
 
-def evaluate_all_models(models: dict, X_test, y_test, X_train=None, y_train=None) -> pd.DataFrame:
+def evaluate_all_models(models: dict, X_test, y_test, X_train=None, y_train=None, perform_cv=True) -> pd.DataFrame:
     
     results = []
     
     for model_name, model in models.items():
-        metrics = evaluate_model(model, X_test, y_test, X_train, y_train)
+        metrics = evaluate_model(model, X_test, y_test, X_train, y_train, perform_cv=perform_cv)
         metrics['Model'] = model_name
         results.append(metrics)
     
@@ -183,13 +183,13 @@ def predict_yield(model, crop_encoder, season_encoder, crop, season, rainfall, t
     
     return round(prediction, 2)
 
-def train_and_get_best_model(X, y):
+def train_and_get_best_model(X, y, perform_cv=True):
     
     X_train, X_test, y_train, y_test = train_test_split_data(X, y)
     
     models = train_all_models(X_train, y_train)
     
-    results_df = evaluate_all_models(models, X_test, y_test, X_train, y_train)
+    results_df = evaluate_all_models(models, X_test, y_test, X_train, y_train, perform_cv=perform_cv)
     
     best_model_name, best_model, _ = select_best_model(models, results_df)
     

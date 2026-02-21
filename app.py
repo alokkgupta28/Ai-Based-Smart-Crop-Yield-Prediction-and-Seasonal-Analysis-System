@@ -485,7 +485,7 @@ def load_and_preprocess_data():
 
 @st.cache_resource
 def train_models(_X, _y):
-    best_model, best_model_name, results_df, all_models = train_and_get_best_model(_X, _y)
+    best_model, best_model_name, results_df, all_models = train_and_get_best_model(_X, _y, perform_cv=False)
     return best_model, best_model_name, results_df, all_models
 
 
