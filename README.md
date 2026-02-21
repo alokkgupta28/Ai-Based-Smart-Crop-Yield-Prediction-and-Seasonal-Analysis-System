@@ -8,7 +8,7 @@
 
 A comprehensive data analytics project using Python and Streamlit for predicting crop yields, analyzing seasonal trends, and providing smart crop recommendations using Machine Learning.
 
-Deployment link-https://ai-based-smart-crop-yield-prediction-and-seasonal-analysis-sys.streamlit.app/
+Deployment link-https://ai-based-smart-crop-yield-prediction.streamlit.app/
 ## 📋 Features
 
 ### 1. 🌱 Crop Yield Prediction
